@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: secc-api
+  namespace: "9990227"
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 3
+  revisionHistoryLimit: 5
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: secc-api
+      app.kubernetes.io/name: secc-api
+  strategy:
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app.kubernetes.io/instance: secc-api
+        app.kubernetes.io/name: secc-api
+    spec:
+      containers:
+      - env:
+        - name: JAVA_INITIAL_MEM_RATIO
+          value: "70"
+        - name: JAVA_MAX_MEM_RATIO
+          value: "70"
+        envFrom:
+        - configMapRef:
+            name: secc-api-configmap
+        - secretRef:
+            name: secc-api-secret
+        image: timon.cloud.prodesp.sp.gov.br/9990227/secc-api:latest
+        imagePullPolicy: Always
+        #livenessProbe:
+        #  failureThreshold: 2
+        #  httpGet:
+        #    path: /secc-api/api/v1/test?skip=all
+        #    port: 1111
+        #    scheme: HTTP
+        #  periodSeconds: 15
+        #  successThreshold: 1
+        #  timeoutSeconds: 1
+        #  initialDelaySeconds: 60
+        name: secc-api
+        ports:
+        - containerPort: 1111
+          name: http
+          protocol: TCP
+        resources:
+          limits:
+            cpu: 1
+            memory: 512Gi
+          requests:
+            cpu: 300m
+            memory: 300Mi
+        securityContext: {}
+      imagePullSecrets:
+      - name: harbor-key-9990227

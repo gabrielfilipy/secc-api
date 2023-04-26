@@ -1,0 +1,11 @@
+apiVersion: v1
+data:
+  DB_HOST: "10.199.225.32"
+  DB_PORT: "3306"
+  DB_DATABASE: "Dbmesaexternasp"
+  TIPO_AMBIENTE_SIGA: "http://www.documentos.dev.spsempapel.sp.gov.br"
+  
+kind: ConfigMap
+metadata:
+  name: secc-api-configmap
+  namespace: "9990227"
